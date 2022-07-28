@@ -1,5 +1,6 @@
 const is_production = process.env.NODE_ENV !== "development";
 
+const webpack = require("webpack");
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 
@@ -35,11 +36,19 @@ module.exports = {
   devtool: is_production ? undefined : "inline-source-map",
   resolve: {
     extensions: [".ts"],
+    alias: {
+      Live2DCubismCore: path.resolve(__dirname, "./src/Core/live2dcubismcore.min.js")
+    },
     fallback: {
       fs: false,
       path: require.resolve("path-browserify")
     }
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      Live2DCubismCore: path.resolve(__dirname, "./src/Core/live2dcubismcore.min.js")
+    })
+  ],
   performance: {
     hints: false
   },
